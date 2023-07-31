@@ -54,7 +54,7 @@ def edit_profile(request):
             from_email='blogicum@ya_prac.ru',
             recipient_list=['admin_user@ya_prac.ru'],
             fail_silently=True,
-            )
+        )
         form.save()
         return redirect('blog:profile', slug=request.user.username)
     return render(request, template, context)
@@ -147,7 +147,7 @@ def delete_post(request, post_id):
     form = PostForm(instance=instance)
     context = {'form': form}
     if request.method == 'POST':
-        if (not request.user.is_authenticated 
+        if (not request.user.is_authenticated
                 or request.user != instance.author):
             return redirect('blog:post_detail', pk=post_id)
         instance.delete()
