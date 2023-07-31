@@ -49,11 +49,11 @@ def edit_profile(request):
     context = {'form': form}
     if form.is_valid():
         send_mail(
-                subject='Profile changes',
-                message=f'{request.user} изменил свои данные',
-                from_email='blogicum@ya_prac.ru',
-                recipient_list=['admin_user@ya_prac.ru'],
-                fail_silently=True,
+            subject='Profile changes',
+            message=f'{request.user} изменил свои данные',
+            from_email='blogicum@ya_prac.ru',
+            recipient_list=['admin_user@ya_prac.ru'],
+            fail_silently=True,
             )
         form.save()
         return redirect('blog:profile', slug=request.user.username)
@@ -131,8 +131,8 @@ def edit_post(request, post_id):
     context = {'form': form}
     if request.method == 'POST' and form.is_valid():
         post = form.save(commit=False)
-        if (not request.user.is_authenticated or
-                request.user != instance.author):
+        if (not request.user.is_authenticated
+                or request.user != instance.author):
             return redirect('blog:post_detail', pk=post_id)
         post.author = request.user
         post.post = instance
@@ -147,8 +147,8 @@ def delete_post(request, post_id):
     form = PostForm(instance=instance)
     context = {'form': form}
     if request.method == 'POST':
-        if (not request.user.is_authenticated or
-                request.user != instance.author):
+        if (not request.user.is_authenticated 
+                or request.user != instance.author):
             return redirect('blog:post_detail', pk=post_id)
         instance.delete()
         return redirect('blog:index')
