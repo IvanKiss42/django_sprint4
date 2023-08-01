@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+
 from .models import Category, Post, Comment
 from .forms import PostForm, UserForm, CommentForm
 from .functions import Paginator_10
@@ -60,14 +61,25 @@ def edit_profile(request):
     return render(request, template, context)
 
 
+
+"""
+Тут немного не соглашусь с замечанием
+Я попытался реализовать доступ к публикации в зависимости от того какой пользователь
+запрашивает информауцию
+Распишу построчно чтобы было видно слабые места если что
+
+Пишу в комментариях так как не нашел тебя в Пачке
+"""
+
+
 def post_detail(request, pk):
     template = 'blog/detail.html'
-    post = get_object_or_404(Post, pk=pk)
-    if post.author != request.user:
+    post = get_object_or_404(Post, pk=pk)         # запрашиваем объект, если он есть в базе
+    if post.author != request.user:               # если запрашивающий не автор пудликации, то мы его фильтруем по дате и опубликованности
         post = get_object_or_404(Post.common_filtration(), pk=pk)
-    form = CommentForm(request.POST or None)
-    comments = Comment.objects.filter(post=pk)
-    context = {'post': post,
+    form = CommentForm(request.POST or None)      
+    comments = Comment.objects.filter(post=pk)    # прикрепляем комментарии в зависимости от поста
+    context = {'post': post,                      # выдаем пост в контекстб если запрашивает автор, то он видит любой свой пост
                'form': form,
                'comments': comments}
     return render(request, template, context)

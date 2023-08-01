@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models import Count
+
 import datetime
 
 User = get_user_model()
@@ -26,7 +27,7 @@ class Category (BaseModel):
         unique=True,
         verbose_name='Идентификатор',
         help_text='Идентификатор страницы для URL; разрешены символы латиницы,'
-        ' цифры, дефис и подчёркивание.')
+                  ' цифры, дефис и подчёркивание.')
 
     class Meta:
         verbose_name = 'категория'
@@ -53,7 +54,7 @@ class Post(BaseModel):
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
         help_text='Если установить дату и время в будущем — можно делать'
-        ' отложенные публикации.')
+                  ' отложенные публикации.')
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -104,3 +105,6 @@ class Comment(BaseModel):
 
     class Meta:
         ordering = ('created_at',)
+
+    def __str__(self):
+        return self.title
