@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.conf import settings
 
 from .models import Category, Post, Comment
 from .forms import PostForm, UserForm, CommentForm
@@ -52,34 +53,13 @@ def edit_profile(request):
         send_mail(
             subject='Profile changes',
             message=f'{request.user} изменил свои данные',
-            from_email='blogicum@ya_prac.ru',
+            from_email=settings.PROJECT_EMAIL,
             recipient_list=['admin_user@ya_prac.ru'],
             fail_silently=True,
         )
         form.save()
         return redirect('blog:profile', slug=request.user.username)
     return render(request, template, context)
-
-
-"""
-Тут немного не соглашусь с замечанием
-Я попытался реализовать доступ к публикации в зависимости от того
-какой пользователь запрашивает информауцию
-Распишу построчно чтобы было видно слабые места если что
-
-Пишу в комментариях так как не нашел тебя в Пачке
-
-post = get_object_or_404(Post, pk=pk)   запрашиваем объект, если он есть в базе
-if post.author != request.user:         если запрашивающий не автор публикации,
-    post = get_object_or_404(
-        Post.common_filtration(),
-        pk=pk) то мы его фильтруем по дате и опубликованности
-comments = Comment.objects.filter(post=pk)  прикрепляем комментарии
-                                            в зависимости от поста
-    context = {'post': post,      выдаем пост в контекст,
-               'form': form,      если запрашивает автор, то он видит любой
-               'comments': comments}  свой пост
-"""
 
 
 def post_detail(request, pk):
@@ -93,22 +73,6 @@ def post_detail(request, pk):
                'form': form,
                'comments': comments}
     return render(request, template, context)
-
-
-"""
-Тут мне в какой-то момент было удобней использовать DetailView
-Но позже не разобрался как навесить в него условий на проверку пользователя
-без миксинов, поэтому вернулся к обычным views
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'blog/detail.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = CommentForm()
-        context['comments'] = self.object.comment.select_related('author')
-        return context
-"""
 
 
 def index(request):
