@@ -4,4 +4,12 @@
 
 :computer: Стек технолигий: Python, Django, Bootstrap, HTML, CSS, SQLite
 
-:electric_plug: Проект предназначен для локального использования. После клонирования репозитория
+:electric_plug: Проект предназначен для локального использования.  
+После клонирования репозитория, в корневой папке проекта установите виртуальное окружение:  
+python -m venv venv
+Активируйте виртуальное окружение:
+source venv/Scripts/activate
+
+Установите зависимости из файла requirements.txt:
+python -m pip install --upgrade pip
+pip install -r requirements.txt
