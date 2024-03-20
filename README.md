@@ -6,10 +6,17 @@
 
 :electric_plug: Проект предназначен для локального использования.  
 После клонирования репозитория, в корневой папке проекта установите виртуальное окружение:  
-python -m venv venv
-Активируйте виртуальное окружение:
-source venv/Scripts/activate
+python -m venv venv  
+Активируйте виртуальное окружение:  
+source venv/Scripts/activate  
 
-Установите зависимости из файла requirements.txt:
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+Установите зависимости из файла requirements.txt:  
+python -m pip install --upgrade pip  
+pip install -r requirements.txt  
+
+Перейдите в папку blogicum, примените миграции и запустите локальный сервер:  
+cd blogicum/  
+python manage.py migrate  
+python manage.py runserver  
+  
+Проект будет доступен по локальному адресу: http://127.0.0.1:8000/  
